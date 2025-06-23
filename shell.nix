@@ -1,6 +1,6 @@
 with import (fetchTarball {
-  url = "https://github.com/nixos/nixpkgs/tarball/b139b6056c8ad4ef7e0cffb81304d59cf077589b";
-  sha256 = "0sn9l19ckvdh227n0rfxk1cjnslhb5hr3g8czf3a436zkyfdl3if";
+  url = "https://github.com/NixOS/nixpkgs/archive/refs/tags/25.05.tar.gz";
+  sha256 = "1915r28xc4znrh2vf4rrjnxldw2imysz819gzhk9qlrkqanmfsxd";
 }) {};
 
 let
@@ -11,20 +11,20 @@ let
     src = fetchFromGitHub {
       owner = "ziglang";
       repo = "zig";
-      rev = "476bdc8b0b02cbd09f6a856aa7dc548dea565109";
-      hash = "sha256-VdMNzvoWNGvVFiblE7vajOetmHa0hyUWw5tWWVZjKEs=";
+      rev = "0.14.1";
+      hash = "sha256-DhVJIY/z12PJZdb5j4dnCRb7k1CmeQVOnayYRP8azDI=";
     };
 
     nativeBuildInputs = [
       cmake
-      llvmPackages_15.llvm.dev
+      llvmPackages_19.llvm.dev
     ];
 
     buildInputs = [
       coreutils
       libxml2
       zlib
-    ] ++ (with llvmPackages_15; [
+    ] ++ (with llvmPackages_19; [
       libclang
       lld
       llvm
@@ -32,12 +32,6 @@ let
 
     preBuild = ''
       export HOME=$TMPDIR;
-    '';
-
-    postPatch = ''
-      # Zig's build looks at /usr/bin/env to find dynamic linking info. This
-      # doesn't work in Nix' sandbox. Use env from our coreutils instead.
-      substituteInPlace lib/std/zig/system/NativeTargetInfo.zig --replace "/usr/bin/env" "${coreutils}/bin/env"
     '';
 
     cmakeFlags = [
