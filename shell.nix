@@ -28,6 +28,7 @@ let
       libclang
       lld
       llvm
+      libcxx
     ]);
 
     preBuild = ''
